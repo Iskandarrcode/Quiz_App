@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_quiz/controllers/quiz_controller.dart';
 import 'package:firebase_quiz/firebase_options.dart';
+import 'package:firebase_quiz/views/screens/menage_question.dart';
 import 'package:firebase_quiz/views/screens/quiz_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -25,9 +27,14 @@ class MyApp extends StatelessWidget {
         return QuizController();
       },
       builder: (context, child) {
-        return const MaterialApp(
+        return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: QuizScreen(),
+          home: PageView(
+            children: const [
+              QuizScreen(),
+              ManageQuestionScreen(),
+            ],
+          ),
         );
       },
     );
