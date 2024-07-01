@@ -1,17 +1,4 @@
 # firebase_quiz
 
 A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# Quiz_App
+[Screencast from 01-07-24 20:40:32.webm](https://github.com/Iskandarrcode/Quiz_App/assets/153985172/f804bf31-77eb-4d28-84c4-97a4693789f7)
