@@ -3,6 +3,7 @@ import 'package:firebase_quiz/models/quiz_models.dart';
 import 'package:firebase_quiz/utils/app_constans.dart';
 import 'package:firebase_quiz/views/widgets/menage_quiz_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class QuestionTestWidget extends StatefulWidget {
   final Question quiz;
@@ -46,6 +47,8 @@ class _QuestionTestWidgetState extends State<QuestionTestWidget> {
 
   @override
   Widget build(BuildContext context) {
+    QuizController quizController = Provider.of<QuizController>(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -71,7 +74,9 @@ class _QuestionTestWidgetState extends State<QuestionTestWidget> {
                     icon: const Icon(Icons.edit),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      quizController.deleteQuiz(widget.quiz.id);
+                    },
                     icon: const Icon(
                       Icons.delete,
                       color: Colors.red,

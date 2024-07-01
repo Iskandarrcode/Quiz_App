@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_quiz/controllers/quiz_controller.dart';
 import 'package:firebase_quiz/models/quiz_models.dart';
 import 'package:firebase_quiz/views/widgets/menage_quiz_widget.dart';
@@ -16,19 +18,36 @@ class ManageQuestionScreen extends StatelessWidget {
       backgroundColor: const Color(0xff8582e5),
       appBar: AppBar(
         backgroundColor: const Color(0xff8582e5),
-        title: const Text('Manage question'),
+        title: const Text(
+          'Manage question',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => ManageQuizWidget(
-                  isEdit: false,
-                  quizController: quizController,
-                ),
-              );
-            },
-            icon: const Icon(Icons.add),
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                },
+                icon: const Icon(Icons.login_outlined),
+              ),
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => ManageQuizWidget(
+                      isEdit: false,
+                      quizController: quizController,
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.add),
+              ),
+            ],
           ),
         ],
       ),

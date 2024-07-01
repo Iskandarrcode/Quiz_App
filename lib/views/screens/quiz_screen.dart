@@ -67,12 +67,15 @@ class _QuizScreenState extends State<QuizScreen> {
                             ),
                           ),
                           const SizedBox(height: 50),
-                          Text(
-                            quizInfo.questionText,
-                            style: const TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                          Padding(
+                            padding: const EdgeInsets.all(30),
+                            child: Text(
+                              quizInfo.questionText,
+                              style: const TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 50),
@@ -179,7 +182,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 width: 220,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(151, 10, 63, 169),
+                  color: const Color.fromARGB(105, 37, 67, 126),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Center(

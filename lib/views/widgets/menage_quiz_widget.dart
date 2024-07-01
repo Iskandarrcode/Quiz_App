@@ -1,6 +1,146 @@
+// import 'package:firebase_quiz/controllers/quiz_controller.dart';
+// import 'package:firebase_quiz/models/quiz_models.dart';
+// import 'package:flutter/material.dart';
+// import 'package:provider/provider.dart';
+
+// class ManageQuizWidget extends StatefulWidget {
+//   final bool isEdit;
+//   final Question? question;
+//   final QuizController quizController;
+
+//   const ManageQuizWidget({
+//     super.key,
+//     required this.isEdit,
+//     this.question,
+//     required this.quizController,
+//   });
+
+//   @override
+//   State<ManageQuizWidget> createState() => _ManageQuizWidgetState();
+// }
+
+// class _ManageQuizWidgetState extends State<ManageQuizWidget> {
+//   final formKey = GlobalKey<FormState>();
+//   final questionController = TextEditingController();
+//   final answerAController = TextEditingController();
+//   final answerBController = TextEditingController();
+//   final answerCController = TextEditingController();
+//   final correctAnswerController = TextEditingController();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     QuizController quizController = Provider.of<QuizController>(context);
+//     return AlertDialog(
+//       title: const Text("Add question"),
+//       content: Form(
+//         key: formKey,
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             TextFormField(
+//               controller: questionController,
+//               decoration: const InputDecoration(
+//                 hintText: 'Enter question',
+//               ),
+//               validator: (value) {
+//                 if (value!.trim().isEmpty) {
+//                   return "Please, enter question";
+//                 }
+//                 return null;
+//               },
+//             ),
+//             TextFormField(
+//               controller: answerAController,
+//               decoration: const InputDecoration(
+//                 hintText: 'Enter answer A',
+//               ),
+//               validator: (value) {
+//                 if (value!.trim().isEmpty) {
+//                   return "Please, enter answer A";
+//                 }
+//                 return null;
+//               },
+//             ),
+//             TextFormField(
+//               controller: answerBController,
+//               decoration: const InputDecoration(
+//                 hintText: 'Enter answer B',
+//               ),
+//               validator: (value) {
+//                 if (value!.trim().isEmpty) {
+//                   return "Please, enter answer B";
+//                 }
+//                 return null;
+//               },
+//             ),
+//             TextFormField(
+//               controller: answerCController,
+//               decoration: const InputDecoration(
+//                 hintText: 'Enter answer C',
+//               ),
+//               validator: (value) {
+//                 if (value!.trim().isEmpty) {
+//                   return "Please, enter answer C";
+//                 }
+//                 return null;
+//               },
+//             ),
+//             TextFormField(
+//               controller: correctAnswerController,
+//               decoration: const InputDecoration(
+//                 hintText: 'Enter correct answer variant',
+//               ),
+//               validator: (value) {
+//                 if (value!.trim().isEmpty) {
+//                   return "Please, enter correct answer variant";
+//                 }
+//                 return null;
+//               },
+//             ),
+//           ],
+//         ),
+//       ),
+//       actions: [
+//         TextButton(
+//           onPressed: () {},
+//           child: const Text(
+//             "Cancel",
+//             style: TextStyle(color: Colors.redAccent),
+//           ),
+//         ),
+//         TextButton(
+//           onPressed: () {
+//             if (formKey.currentState!.validate()) {
+//               quizController.addQuiz(
+//                 questionController.text,
+//                 [answerAController, answerBController, answerCController],
+//                 num.parse(correctAnswerController.text),
+//               );
+//               questionController.clear();
+//               answerAController.clear();
+//               answerBController.clear();
+//               answerCController.clear();
+//               correctAnswerController.clear();
+//               Navigator.pop(context);
+//             }
+//           },
+//           child: const Text(
+//             "Add",
+//             style: TextStyle(color: Colors.teal),
+//           ),
+//         )
+//       ],
+//     );
+//   }
+// }
+// //options: List<String>.from(
+// //         query['options'].map((dynamic item) => item as String),
+// //       ),
+
 import 'package:firebase_quiz/controllers/quiz_controller.dart';
 import 'package:firebase_quiz/models/quiz_models.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ManageQuizWidget extends StatefulWidget {
   final bool isEdit;
@@ -19,62 +159,161 @@ class ManageQuizWidget extends StatefulWidget {
 }
 
 class _ManageQuizWidgetState extends State<ManageQuizWidget> {
-  final List<TextEditingController> _list = [
-    TextEditingController(),
-    TextEditingController(),
-    TextEditingController(),
-  ];
+  final formKey = GlobalKey<FormState>();
+  final questionController = TextEditingController();
+  final answerAController = TextEditingController();
+  final answerBController = TextEditingController();
+  final answerCController = TextEditingController();
+  final correctAnswerController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit && widget.question != null) {
+      questionController.text = widget.question!.questionText;
+      answerAController.text = widget.question!.options[0];
+      answerBController.text = widget.question!.options[1];
+      answerCController.text = widget.question!.options[2];
+      correctAnswerController.text =
+          widget.question!.correctAnswerIndex.toString();
+    }
+  }
+
+  @override
+  void dispose() {
+    questionController.dispose();
+    answerAController.dispose();
+    answerBController.dispose();
+    answerCController.dispose();
+    correctAnswerController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(widget.isEdit ? 'Edit quiz' : 'Add Quiz'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _list[0],
+    QuizController quizController = Provider.of<QuizController>(context);
+    return SingleChildScrollView(
+      child: AlertDialog(
+        title: Text(widget.isEdit ? "Edit Question" : "Add Question"),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: questionController,
+                decoration: const InputDecoration(
+                  hintText: 'Enter question',
+                ),
+                validator: (value) {
+                  if (value!.trim().isEmpty) {
+                    return "Please, enter question";
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: answerAController,
+                decoration: const InputDecoration(
+                  hintText: 'Enter answer A',
+                ),
+                validator: (value) {
+                  if (value!.trim().isEmpty) {
+                    return "Please, enter answer A";
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: answerBController,
+                decoration: const InputDecoration(
+                  hintText: 'Enter answer B',
+                ),
+                validator: (value) {
+                  if (value!.trim().isEmpty) {
+                    return "Please, enter answer B";
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: answerCController,
+                decoration: const InputDecoration(
+                  hintText: 'Enter answer C',
+                ),
+                validator: (value) {
+                  if (value!.trim().isEmpty) {
+                    return "Please, enter answer C";
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: correctAnswerController,
+                decoration: const InputDecoration(
+                  hintText: 'Enter correct answer variant',
+                ),
+                validator: (value) {
+                  if (value!.trim().isEmpty) {
+                    return "Please, enter correct answer variant";
+                  }
+                  return null;
+                },
+              ),
+            ],
           ),
-          TextField(
-            controller: _list[1],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text(
+              "Cancel",
+              style: TextStyle(color: Colors.redAccent),
+            ),
           ),
-          TextField(
-            controller: _list[2],
+          TextButton(
+            onPressed: () async {
+              if (formKey.currentState!.validate()) {
+                if (widget.isEdit) {
+                  await widget.quizController.editQuiz(
+                    widget.question!.id,
+                    questionController.text,
+                    [
+                      answerAController.text,
+                      answerBController.text,
+                      answerCController.text
+                    ],
+                    int.parse(correctAnswerController.text),
+                  );
+                } else {
+                  await quizController.addQuiz(
+                    questionController.text,
+                    [
+                      answerAController.text,
+                      answerBController.text,
+                      answerCController.text
+                    ],
+                    int.parse(correctAnswerController.text),
+                  );
+                }
+                questionController.clear();
+                answerAController.clear();
+                answerBController.clear();
+                answerCController.clear();
+                correctAnswerController.clear();
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context);
+              }
+            },
+            child: Text(
+              widget.isEdit ? "Edit" : "Add",
+              style: const TextStyle(color: Colors.teal),
+            ),
           ),
         ],
       ),
-      actions: [
-        TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Cancel')),
-        TextButton(
-            onPressed: () {
-              // if (widget.isEdit) {
-              //   widget.quizController.editQuiz(
-              //     quiz: Question(id: id, questionText: questionText, options: options, correctAnswerIndex: correctAnswerIndex)
-              //   );
-              // } else {
-              //   widget.quizController.addQuiz(
-              //     question: _list[0].text,
-              //     options: _list[1]
-              //         .text
-              //         .split(',')
-              //         .map(
-              //           (e) => e.trim(),
-              //         )
-              //         .toList(),
-              //     correctAnswer: int.parse(_list[2].text),
-              //   );
-              // }
-              Navigator.of(context).pop();
-            },
-            child: const Text('Save')),
-      ],
     );
   }
 }
-//options: List<String>.from(
-//         query['options'].map((dynamic item) => item as String),
-//       ),
